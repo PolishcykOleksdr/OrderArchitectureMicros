@@ -1,14 +1,14 @@
 package com.order.platform.orderservice.controller;
 
+import com.order.platform.orderservice.dto.OrderDto;
+import com.order.platform.orderservice.entity.OrderEntity;
 import com.order.platform.orderservice.entity.OrderItemEntity;
+import com.order.platform.orderservice.mapper.OrderEntityMapper;
 import com.order.platform.orderservice.repository.OrderJpaRepository;
 import com.order.platform.orderservice.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * author: user,
@@ -20,11 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class OrderController {
     private final OrderService orderService;
+    private final OrderEntityMapper orderMapper;
 
     @PostMapping()
-    public OrderItemEntity create(
-            @RequestBody OrderItemEntity orderItemEntity
+    public OrderDto create(
+            @RequestBody OrderEntity orderItemEntity
     ) {
-        return orderService.create(orderItemEntity);
+        var createdEntity = orderService.create(orderItemEntity);
+        return orderMapper.toOrderDto(createdEntity);
+    }
+
+    @GetMapping("/{id}")
+    public OrderDto getOrder(
+            @PathVariable Long id
+    ) {
+        var foundEntity = orderService.getOrderOrThrow(id);
+        return orderMapper.toOrderDto(foundEntity);
     }
 }
