@@ -18,7 +18,6 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "orders")
-@EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderEntity {
@@ -47,5 +46,5 @@ public class OrderEntity {
     private OrderStatus status;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
-    private Set<OrderItemEntity> orderItems = new LinkedHashSet<>();
+    private Set<OrderItemEntity> items = new LinkedHashSet<>();
 }

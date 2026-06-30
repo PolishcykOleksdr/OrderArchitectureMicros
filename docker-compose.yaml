@@ -7,6 +7,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: rootroot
       POSTGRES_DB: orders
+      TZ: Europe/Kyiv
     ports:
       - "5432:5432"
     volumes:
@@ -16,6 +17,20 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    container_name: order-app
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+    ports:
+      - "8080:8080"
 
 volumes:
   postgres_data:

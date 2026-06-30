@@ -1,6 +1,7 @@
 package com.order.platform.orderservice.mapper;
 
-import com.order.platform.orderservice.dto.OrderDto;
+import com.order.platform.orderservice.dto.response.OrderResponseDto;
+import com.order.platform.orderservice.dto.request.CreateOrderRequestDto;
 import com.order.platform.orderservice.entity.OrderEntity;
 import org.mapstruct.*;
 
@@ -14,12 +15,12 @@ import org.mapstruct.*;
         componentModel = MappingConstants.ComponentModel.SPRING
 )
 public interface OrderEntityMapper {
-    OrderEntity toEntity(OrderDto order);
+    OrderEntity toEntity(CreateOrderRequestDto order);
 
     @AfterMapping
     default void linkOrderItemEntities(@MappingTarget OrderEntity orderEntity) {
-        orderEntity.getOrderItems().forEach(orderItemEntity -> orderItemEntity.setOrder(orderEntity));
+        orderEntity.getItems().forEach(orderItemEntity -> orderItemEntity.setOrder(orderEntity));
     }
 
-    OrderDto toOrderDto(OrderEntity orderEntity);
+    OrderResponseDto toOrderDto(OrderEntity orderEntity);
 }
